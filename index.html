@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EvaEraHealth — Adaptive Menopause Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/hcp.css">
+</head>
+<body>
+
+<!-- NAV-->
+<nav class="nav">
+  <div class="nav-brand">Eva<span>Era</span>Health</div>
+  <div class="nav-actions">
+    <button class="nav-btn" onclick="showScreen('hcp-auth-screen')">🩺 Clinician</button>
+    <button class="nav-btn" onclick="showScreen('auth-screen')">👤 Account</button>
+  </div>
+</nav>
+
+<!--AUTH SCREEN-->
+<div id="auth-screen" class="screen active">
+  <div class="auth-card">
+    <span class="auth-logo">🌸</span>
+    <h2>EvaEraHealth</h2>
+    <p style="font-size:13px;opacity:0.6;margin-bottom:20px">Personalised menopause care for Indian women 40–55</p>
+    <div class="auth-tab-row">
+      <div class="auth-tab active" onclick="authTab('login')">Sign In</div>
+      <div class="auth-tab" onclick="authTab('register')">Register</div>
+    </div>
+    <div id="auth-login">
+      <div class="form-group"><label>Mobile / Email</label><input type="text" id="login-id" placeholder="+91 98765 43210"></div>
+      <button class="btn-auth" onclick="sendOTP('login')">Send OTP →</button>
+    </div>
+    <div id="auth-register" style="display:none">
+      <div class="form-group"><label>Full Name</label><input type="text" id="reg-name" placeholder="Your name"></div>
+      <div class="form-group"><label>Mobile</label><input type="text" id="reg-mobile" placeholder="+91 98765 43210"></div>
+      <button class="btn-auth" onclick="sendOTP('register')">Send OTP →</button>
+    </div>
+    <div id="auth-otp" style="display:none">
+      <p style="font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:12px">Demo OTP: 1234</p>
+      <div class="otp-row">
+        <input type="text" maxlength="1" class="otp-digit" oninput="otpNext(this)">
+        <input type="text" maxlength="1" class="otp-digit" oninput="otpNext(this)">
+        <input type="text" maxlength="1" class="otp-digit" oninput="otpNext(this)">
+        <input type="text" maxlength="1" class="otp-digit" oninput="otpNext(this)">
+      </div>
+      <button class="btn-auth" onclick="verifyOTP()">Verify & Continue →</button>
+    </div>
+    <div class="guest-link">or <span onclick="startGuest()">continue as guest →</span></div>
+  </div>
+</div>
+
+<!--CONSENT SCREEN-->
+<div id="consent-screen" class="screen">
+  <div class="consent-card">
+    <h2>🛡️ Your Data, Your Control</h2>
+    <p style="font-size:13px;color:var(--slate);margin:8px 0 12px;line-height:1.5">Please review and accept the following before proceeding. Your data is protected under DPDP Act 2023.</p>
+    <div style="background:linear-gradient(135deg,#FFF8E7,#FFF3E0);border:1.5px solid #FFB300;border-radius:12px;padding:14px 16px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start">
+      <span style="font-size:20px;flex-shrink:0">🤖</span>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#E65100;margin-bottom:4px">AI-Powered Assessment — Important Notice</div>
+        <div style="font-size:12px;color:#795548;line-height:1.5">EvaEraHealth uses Claude AI (Anthropic) to generate personalised wellness insights. <strong>This is not a medical diagnosis.</strong> All outputs must be reviewed by a qualified clinician.</div>
+      </div>
+    </div>
+    <div id="consent-items-container"></div>
+    <button class="btn-consent" id="btn-consent-proceed" onclick="proceedAfterConsent()" disabled>Begin Assessment →</button>
+    <div style="margin-top:18px;border-top:1px solid #E5E7EB;padding-top:14px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <span style="font-size:16px">⚖️</span>
+        <span style="font-size:12px;font-weight:700;color:var(--navy)">Your Rights Under DPDP Act 2023</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px">
+        <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:8px;padding:8px 10px"><div style="font-size:10px;font-weight:700;color:#166534">✓ Right to Access</div><div style="font-size:10px;color:#4B5563">View all your stored data</div></div>
+        <div style="background:#EFF6FF;border:1px solid #93C5FD;border-radius:8px;padding:8px 10px"><div style="font-size:10px;font-weight:700;color:#1E40AF">✓ Right to Correct</div><div style="font-size:10px;color:#4B5563">Fix inaccurate information</div></div>
+        <div style="background:#FDF4FF;border:1px solid #D8B4FE;border-radius:8px;padding:8px 10px"><div style="font-size:10px;font-weight:700;color:#6B21A8">✓ Right to Erasure</div><div style="font-size:10px;color:#4B5563">Delete your data on request</div></div>
+        <div style="background:#FFF7ED;border:1px solid #FCD34D;border-radius:8px;padding:8px 10px"><div style="font-size:10px;font-weight:700;color:#92400E">✓ Right to Withdraw</div><div style="font-size:10px;color:#4B5563">Withdraw consent anytime</div></div>
+      </div>
+      <div style="background:#1E3A5F;border-radius:8px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:10px;color:rgba(255,255,255,0.6)">Data Protection Officer</div>
+        <span style="font-size:10px;color:#93C5FD;font-weight:600">dpo@evaerahealth.in</span>
+      </div>
+    </div>
+    <p style="font-size:11px;color:#9ca3af;text-align:center;margin-top:12px">EvaEraHealth Clinic, Gurugram Flagship Center · DPO: dpo@evaerahealth.in</p>
+  </div>
+</div>
+
+<!--FORM SCREEN-->
+<div id="form-screen" class="screen">
+  <div class="progress-header">
+    <span id="progress-label">Step 1</span>
+    <span id="progress-path-label" style="font-size:11px;color:var(--rose);font-weight:600"></span>
+  </div>
+  <div class="overall-progress"><div class="overall-progress-fill" id="overall-prog" style="width:5%"></div></div>
+  <div class="step-dots-row" id="step-dots"></div>
+  <div id="steps-container"></div>
+  <div class="step-nav">
+    <button class="btn-back" id="btn-back" onclick="stepBack()">← Back</button>
+    <button class="btn-next" id="btn-next" onclick="stepNext()">Continue →</button>
+  </div>
+</div>
+
+<!--GYNE HARD STOP-->
+<div id="gyne-stop-screen" class="screen">
+  <div style="max-width:560px;margin:40px auto;padding:0 20px">
+    <div style="background:#fff;border-radius:20px;padding:32px;box-shadow:var(--shadow)">
+      <div id="gyne-stop-body"></div>
+    </div>
+  </div>
+</div>
+
+<!--PSYCH HARD STOP-->
+<div id="psych-stop-screen" class="screen">
+  <div style="max-width:560px;margin:40px auto;padding:0 20px">
+    <div style="background:#fff;border-radius:20px;padding:32px;box-shadow:var(--shadow)">
+      <div id="psych-stop-body"></div>
+    </div>
+  </div>
+</div>
+
+<!--LOADING SCREEN-->
+<div id="loading-screen" class="screen">
+  <div>
+    <div class="loading-flower">🌸</div>
+    <h2>Analysing Your Health Profile</h2>
+    <p style="opacity:0.7;font-size:14px;margin-bottom:4px">EvaEraHealth adaptive clinical pipeline</p>
+    <div class="loading-steps">
+      <div class="ls-item">✦  Adaptive Assessment Engine · scoring all domains…</div>
+      <div class="ls-item">✦  Decision Tree Engine · branching logic check…</div>
+      <div class="ls-item">✦  Clinical Scoring · MenQOL · PHQ9 · GAD7 · ISI · PSS8 · FSFI…</div>
+      <div class="ls-item">✦  AI Clinical Engine · Driver Detection · Prakriti–Vikriti…</div>
+      <div class="ls-item">✦  Care Plan Generator · personalised recommendations…</div>
+    </div>
+    <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+  </div>
+</div>
+
+<!--RESULTS SCREEN-->
+<div id="results-screen" class="screen"></div>
+
+<!--HCP AUTH-->
+<div id="hcp-auth-screen" class="screen">
+  <div class="hcp-auth-card">
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:24px;margin-bottom:4px">🩺 Clinician Dashboard</h2>
+    <p style="font-size:12px;opacity:0.5;margin-bottom:20px">EvaEraHealth Clinic, Gurugram Flagship Center</p>
+    <div class="form-group"><label>Provider Email / ID</label><input type="text" id="hcp-login-id" placeholder="provider@hospital.com" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:12px;color:#fff;width:100%;font-size:14px;outline:none"></div>
+    <button class="btn-hcp" onclick="hcpSendOTP()">Send OTP</button>
+    <div id="hcp-otp-section" style="display:none;margin-top:16px">
+      <p style="font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:8px">Demo OTP: 1234</p>
+      <div class="otp-row">
+        <input type="text" maxlength="1" class="hcp-otp-digit" oninput="hcpOtpNext(this)" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;color:#fff;font-size:20px;font-weight:700;padding:12px 0;text-align:center">
+        <input type="text" maxlength="1" class="hcp-otp-digit" oninput="hcpOtpNext(this)" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;color:#fff;font-size:20px;font-weight:700;padding:12px 0;text-align:center">
+        <input type="text" maxlength="1" class="hcp-otp-digit" oninput="hcpOtpNext(this)" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;color:#fff;font-size:20px;font-weight:700;padding:12px 0;text-align:center">
+        <input type="text" maxlength="1" class="hcp-otp-digit" oninput="hcpOtpNext(this)" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;color:#fff;font-size:20px;font-weight:700;padding:12px 0;text-align:center">
+      </div>
+      <button class="btn-hcp" id="btn-hcp-verify" onclick="hcpVerifyOTP()">Verify & Enter Portal</button>
+    </div>
+    <div class="guest-link" style="color:rgba(255,255,255,0.5)"><span onclick="showScreen('auth-screen')" style="color:rgba(255,255,255,0.7);text-decoration:underline;cursor:pointer">← Back to Patient App</span></div>
+  </div>
+</div>
+
+<!--HCP PORTAL-->
+<div id="hcp-portal-screen" class="screen">
+  <div class="hcp-header">
+    <div>
+      <h2>🩺 EvaEraHealth Clinician Dashboard</h2>
+      <div class="hcp-header-meta">EvaEraHealth Clinic · Gurugram Flagship Center</div>
+    </div>
+    <div class="hcp-header-actions">
+      <span style="font-size:11px;color:rgba(255,255,255,0.22);margin-right:6px">Demo OTP: 1234</span>
+      <button class="hcp-header-btn" onclick="showScreen('auth-screen')">← Patient App</button>
+    </div>
+  </div>
+  <div class="hcp-content" id="hcp-content"></div>
+</div>
+
+<!--CONFIRM MODAL-->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-card">
+    <h3 id="modal-title">Review your answers</h3>
+    <div class="modal-summary" id="modal-summary"></div>
+    <div class="modal-actions">
+      <button class="btn-modal-back" onclick="closeModal()">← Edit</button>
+      <button class="btn-modal-confirm" onclick="confirmStep()">Confirm & Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!--SCRIPTS (order matters: state → engine → auth → form-logic → form-builders → results → hcp)-->
+<script src="js/state.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/form-logic.js"></script>
+<script src="js/form-builders.js"></script>
+<script src="js/results.js"></script>
+<script src="js/hcp.js"></script>
+
+</body>
+</html>

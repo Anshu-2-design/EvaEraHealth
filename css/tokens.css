@@ -1,0 +1,56 @@
+/*
+ * USAGE:
+ *   @import './design-tokens.css';
+ *   background: var(--rose-deep);
+ */
+
+/*COLOUR TOKENS
+ * Brand: Rose (primary) + Navy (trust) + Teal (health) + Gold (caution)
+ * Status: --ok (green) + --warn (amber) + --danger (red)
+ * HCP Dark Theme: --hcp-bg, --hcp-panel, --hcp-border
+ */
+:root{--rose:#C2185B;--rose-lt:#F8BBD9;--rose-deep:#880E4F;--teal:#00695C;--teal-lt:#B2DFDB;--gold:#F9A825;--gold-lt:#FFF8E1;--navy:#0D1B2A;--navy-mid:#1B2B3A;--navy-lt:#243447;--slate:#4A5568;--mist:#F7F3F0;--white:#FFFFFF;--danger:#D32F2F;--danger-lt:#FFEBEE;--warn:#E65100;--warn-lt:#FFF3E0;--ok:#2E7D32;--ok-lt:#E8F5E9;--purple:#6A1B9A;--purple-lt:#F3E5F5;--r:12px;--r-sm:8px;--r-lg:20px;--shadow:0 4px 24px rgba(0,0,0,0.10);--shadow-lg:0 8px 40px rgba(0,0,0,0.16);}
+
+/*HCP DARK THEME TOKENS
+ * Used exclusively in the Clinician Portal dark interface
+ */
+:root {
+  --hcp-bg:          #0F1923;   /* Portal background */
+  --hcp-panel:       #1B2B3A;   /* Panel/card background */
+  --hcp-border:      rgba(255,255,255,0.06);
+  --hcp-text:        rgba(255,255,255,0.8);
+  --hcp-text-muted:  rgba(255,255,255,0.35);
+  --hcp-accent:      #00BCD4;   /* Teal accent for HCP */
+  --hcp-severe:      #EF9A9A;   /* Red on dark background */
+  --hcp-moderate:    #FFCC80;   /* Amber on dark */
+  --hcp-mild:        #A5D6A7;   /* Green on dark */
+  --hcp-info:        #80DEEA;   /* Teal on dark */
+}
+
+/* TYPOGRAPHY TOKENS
+ * Display: Cormorant Garamond (serif) — luxury, authority
+ * Body: DM Sans (humanist sans) — warm, readable
+ */
+:root {
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'Courier New', monospace;
+}
+
+/*SPACING TOKENS
+ * Base unit: 4px — all spacing is multiples of 4
+ */
+:root {
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --r:     14px;  /* Default border radius */
+  --r-sm:  8px;   /* Small radius (inputs, chips) */
+  --r-lg:  20px;  /* Large radius (modals, auth cards) */
+}
